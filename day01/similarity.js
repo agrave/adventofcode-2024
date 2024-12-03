@@ -1,4 +1,3 @@
-const { count } = require('console')
 const fs = require('fs')
 
 const rawContent = fs.readFileSync('./day01/input.txt', { encoding: 'utf8' })
