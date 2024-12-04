@@ -2,31 +2,39 @@ const fs = require('fs')
 
 const rawContent = fs.readFileSync('./day03/input.txt', { encoding: 'utf8' })
 
-const enabledInstructions = /((do\(\)|^).+?(don't\(\)|$))/g
 const instructionTemplate = /mul\(\d{1,3},\d{1,3}\)/g
 
-const lines = rawContent.split('\r\n')
+let line = rawContent
+const start = "don't()"
+const end = 'do()'
 
-const enabled = lines.reduce((acc,line)=>{
-    const enabled =[...line.matchAll(enabledInstructions)].flatMap(item=>item[0])
-    acc.push(...enabled)
-    return acc
-},[])
+let isEnabled = true
+let position
+let enabledLines = []
 
-console.log(enabled)
+do {
+    if (isEnabled) {
+        position = line.indexOf(start)
+        enabledLines.push(line.slice(0, position))
+        line = line.slice(position)
+        isEnabled = false
 
-const parsedText = enabled.reduce((text,enabled)=>{
+    } else {
+        position = line.indexOf(end)
+        line = line.slice(position)
+        isEnabled = true
+    }
+} while (position !== -1)
 
-    const instructions = [...enabled.matchAll(instructionTemplate)].flatMap(item=>item[0])
-    // console.log(instructions.length)
+const instuctions = enabledLines.reduce((text, enabled) => {
+
+    const instructions = [...enabled.matchAll(instructionTemplate)].flatMap(item => item[0])
     text.push(...instructions)
     return text
-},[])
-
-    // console.log(parsedText)
+}, [])
 
 
-const result = parsedText.reduce((summ, instruction) => {
+const result = instuctions.reduce((summ, instruction) => {
     const [a, b] = instruction.slice(4, -1).split(',')
     summ += a * b
     return summ
