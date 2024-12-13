@@ -40,9 +40,7 @@ unvisited.forEach(point => {
 })
 
 const result = regions.reduce((total, region) => {
-    let perimetr = 0
     let horizontalUpSide = 0, horizontalDownSide = 0, verticalLeftSide = 0, verticalRightSide = 0
-
 
     region.area.forEach((value, key, set) => {
         const [x, y] = value.split('|').map(e => parseInt(e))
@@ -84,10 +82,7 @@ const result = regions.reduce((total, region) => {
     const sides = (horizontalUpSide + horizontalDownSide + verticalLeftSide + verticalRightSide) / 2
     total += sides * region.area.size
     console.log('sides', sides, 'size', region.area.size)
-    // console.log('horizontalUpSide', horizontalUpSide, 'horizontalDownSide', horizontalDownSide, 'verticalLeftSide', verticalLeftSide, 'verticalRightSide', verticalRightSide)
-    // console.log((horizontalUpSide + horizontalDownSide + verticalLeftSide + verticalRightSide)/2)
     return total
 }, 0)
 
-// console.dir(regions, { depth: 5 })
 console.log(result)
