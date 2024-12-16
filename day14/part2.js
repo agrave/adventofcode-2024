@@ -41,6 +41,48 @@ const calculateQuadrants = (map) => {
     return quadrants.topLeft.length * quadrants.topRight.length * quadrants.bottomLeft.length * quadrants.bottomRight.length
 }
 
-const res = calculateQuadrants(positionOver(100))
+const makeCanvas = (robots) => {
 
-console.log(res)
+    const canvas = new Array(H).fill('.'.repeat(W)).map(x => x.split(''))
+    robots.forEach(robot => {
+        const { x, y } = robot
+        if (canvas[y][x] === '.') {
+            canvas[y][x] = 1
+        } else {
+            canvas[y][x] += 1
+        }
+    });
+    return canvas
+}
+
+const print = (canvas) => console.log(canvas.map(x => x.join('')).join('\r\n'))
+
+for (let i = 0; i < 100_000; i++) {
+    let xMasTree = false
+    const canvas = makeCanvas(positionOver(i))
+
+    const isRobot = (val) => val !== '.'
+
+    for (let y = 0; y < H - 10; y++) {
+        for (let x = 0; x < W; x++) {
+            if (
+                isRobot(canvas[y][x]) &&
+                isRobot(canvas[y + 1][x]) &&
+                isRobot(canvas[y + 2][x]) &&
+                isRobot(canvas[y + 3][x]) &&
+                isRobot(canvas[y + 4][x]) &&
+                isRobot(canvas[y + 5][x]) &&
+                isRobot(canvas[y + 6][x]) &&
+                isRobot(canvas[y + 7][x])
+            ) {
+                console.log('seconds:', i)
+                print(canvas)
+                console.log('seconds:', i)
+                xMasTree = true
+                break
+            }
+        }
+        if (xMasTree) break
+    }
+    if (xMasTree) break
+}
